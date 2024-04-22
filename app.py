@@ -1,72 +1,72 @@
 import streamlit as st
 import pandas as pd
-from graphviz import Digraph
+# from graphviz import Digraph
 import os
 
 
-def create_detailed_decision_tree(harvest_value, detector_value, P_storm_given_storm_prediction,
-                                  P_no_storm_given_storm_prediction, P_storm_given_no_storm_prediction,
-                                  P_no_storm_given_no_storm_prediction, wait_case1_a, wait_case1_b,
-                                  wait_case2_a, wait_case2_b, case1, case2):
-    dot = Digraph()
+# def create_detailed_decision_tree(harvest_value, detector_value, P_storm_given_storm_prediction,
+#                                   P_no_storm_given_storm_prediction, P_storm_given_no_storm_prediction,
+#                                   P_no_storm_given_no_storm_prediction, wait_case1_a, wait_case1_b,
+#                                   wait_case2_a, wait_case2_b, case1, case2):
+#     dot = Digraph()
 
-    # Root node
-    dot.attr('node', shape='ellipse', style='filled', color='lightblue')
-    dot.node('R', 'Decision: Buy Detector or Harvest Now')
+#     # Root node
+#     dot.attr('node', shape='ellipse', style='filled', color='lightblue')
+#     dot.node('R', 'Decision: Buy Detector or Harvest Now')
 
-    # Harvest now node
-    dot.attr('node', shape='box', style='filled', color='lightgrey')
-    dot.node('H', f'Harvest Now\nRevenue: ${harvest_value}')
-    dot.edge('R', 'H')
+#     # Harvest now node
+#     dot.attr('node', shape='box', style='filled', color='lightgrey')
+#     dot.node('H', f'Harvest Now\nRevenue: ${harvest_value}')
+#     dot.edge('R', 'H')
 
-    # Buy detector node
-    dot.attr('node', shape='ellipse', style='filled', color='lightblue')
-    dot.node('B', 'Buy Detector')
-    dot.edge('R', 'B')
+#     # Buy detector node
+#     dot.attr('node', shape='ellipse', style='filled', color='lightblue')
+#     dot.node('B', 'Buy Detector')
+#     dot.edge('R', 'B')
 
-    # Storm prediction branches
-    dot.attr('node', shape='diamond', style='filled', color='lightgreen')
-    dot.node('C1', 'Storm Prediction')
-    dot.node('D1', f'Actual Storm\nP={P_storm_given_storm_prediction}')
-    dot.node('E1', f'No Actual Storm\nP={P_no_storm_given_storm_prediction}')
-    dot.edge('B', 'C1')
-    dot.edge('C1', 'D1')
-    dot.edge('C1', 'E1')
+#     # Storm prediction branches
+#     dot.attr('node', shape='diamond', style='filled', color='lightgreen')
+#     dot.node('C1', 'Storm Prediction')
+#     dot.node('D1', f'Actual Storm\nP={P_storm_given_storm_prediction}')
+#     dot.node('E1', f'No Actual Storm\nP={P_no_storm_given_storm_prediction}')
+#     dot.edge('B', 'C1')
+#     dot.edge('C1', 'D1')
+#     dot.edge('C1', 'E1')
 
-    # No storm prediction branches
-    dot.node('C2', 'No Storm Prediction')
-    dot.node('D2', f'Actual Storm\nP={P_storm_given_no_storm_prediction}')
-    dot.node('E2', f'No Actual Storm\nP={P_no_storm_given_no_storm_prediction}')
-    dot.edge('B', 'C2')
-    dot.edge('C2', 'D2')
-    dot.edge('C2', 'E2')
+#     # No storm prediction branches
+#     dot.node('C2', 'No Storm Prediction')
+#     dot.node('D2', f'Actual Storm\nP={P_storm_given_no_storm_prediction}')
+#     dot.node('E2', f'No Actual Storm\nP={P_no_storm_given_no_storm_prediction}')
+#     dot.edge('B', 'C2')
+#     dot.edge('C2', 'D2')
+#     dot.edge('C2', 'E2')
 
-    # Outcome nodes for each scenario
-    dot.attr('node', shape='box', style='filled', color='lightgrey')
-    dot.node('F1', f'Revenue: ${wait_case1_a}')
-    dot.node('G1', f'Revenue: ${wait_case1_b}')
-    dot.node('F2', f'Revenue: ${wait_case2_a}')
-    dot.node('G2', f'Revenue: ${wait_case2_b}')
-    dot.edge('D1', 'F1')
-    dot.edge('E1', 'G1')
-    dot.edge('D2', 'F2')
-    dot.edge('E2', 'G2')
+#     # Outcome nodes for each scenario
+#     dot.attr('node', shape='box', style='filled', color='lightgrey')
+#     dot.node('F1', f'Revenue: ${wait_case1_a}')
+#     dot.node('G1', f'Revenue: ${wait_case1_b}')
+#     dot.node('F2', f'Revenue: ${wait_case2_a}')
+#     dot.node('G2', f'Revenue: ${wait_case2_b}')
+#     dot.edge('D1', 'F1')
+#     dot.edge('E1', 'G1')
+#     dot.edge('D2', 'F2')
+#     dot.edge('E2', 'G2')
 
-    # Value calculation nodes
-    dot.attr('node', shape='box', style='filled', color='gold')
-    dot.node('Val1', f'Value with Storm Pred.: ${case1}')
-    dot.node('Val2', f'Value with No Storm Pred.: ${case2}')
-    dot.node('ValB', f'Total Value by Detector: ${detector_value}')
-    dot.edge('F1', 'Val1')
-    dot.edge('G1', 'Val1')
-    dot.edge('F2', 'Val2')
-    dot.edge('G2', 'Val2')
-    dot.edge('Val1', 'ValB')
-    dot.edge('Val2', 'ValB')
+#     # Value calculation nodes
+#     dot.attr('node', shape='box', style='filled', color='gold')
+#     dot.node('Val1', f'Value with Storm Pred.: ${case1}')
+#     dot.node('Val2', f'Value with No Storm Pred.: ${case2}')
+#     dot.node('ValB', f'Total Value by Detector: ${detector_value}')
+#     dot.edge('F1', 'Val1')
+#     dot.edge('G1', 'Val1')
+#     dot.edge('F2', 'Val2')
+#     dot.edge('G2', 'Val2')
+#     dot.edge('Val1', 'ValB')
+#     dot.edge('Val2', 'ValB')
 
-    # Save and display the graph
-    dot.render('detailed_decision_tree', format='png', cleanup=True)
-    return 'detailed_decision_tree.png'
+#     # Save and display the graph
+#     dot.render('detailed_decision_tree', format='png', cleanup=True)
+#     return 'detailed_decision_tree.png'
 
 # Data and initial setup
 data = {
@@ -131,7 +131,7 @@ st.write("Value if Buying Detector: $", detector_value)
 st.write("Recommended Decision: ", recommended)
 
 
-# Generate and display the decision tree graph
-graph_path = create_detailed_decision_tree(harvest_value, detector_value, 0.29, 0.71, 0.65, 0.35, 0.33, 0.67, 0.33, 0.67, 0.33, 0.67)
-st.image(graph_path)
+# # Generate and display the decision tree graph
+# graph_path = create_detailed_decision_tree(harvest_value, detector_value, 0.29, 0.71, 0.65, 0.35, 0.33, 0.67, 0.33, 0.67, 0.33, 0.67)
+# st.image(graph_path)
 
